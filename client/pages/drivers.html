@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drivers - TransitOps</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <script src="../js/auth.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">T</div>
+                <h1 class="sidebar-title">TransitOps</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="dashboard.html" class="nav-link">
+                                <span class="nav-icon">📊</span>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="vehicles.html" class="nav-link">
+                                <span class="nav-icon">🚚</span>
+                                <span>Fleet</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="drivers.html" class="nav-link active">
+                                <span class="nav-icon">👤</span>
+                                <span>Drivers</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="trips.html" class="nav-link">
+                                <span class="nav-icon">🗺️</span>
+                                <span>Trips</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="maintenance.html" class="nav-link">
+                                <span class="nav-icon">🔧</span>
+                                <span>Maintenance</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="fuel-expenses.html" class="nav-link">
+                                <span class="nav-icon">⛽</span>
+                                <span>Fuel & Expenses</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="reports.html" class="nav-link">
+                                <span class="nav-icon">📈</span>
+                                <span>Analytics</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="settings.html" class="nav-link">
+                                <span class="nav-icon">⚙️</span>
+                                <span>Settings</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-menu">
+                    <div class="user-avatar">R</div>
+                    <div class="user-info">
+                        <div class="user-name">Raven K.</div>
+                        <div class="user-role">Dispatcher</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <div class="search-input">
+                        <input type="text" id="searchInput" placeholder="Search drivers by name or license...">
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="header-icon-btn">
+                        🔔
+                        <span class="notification-badge"></span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="page-content">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div class="page-header-left">
+                        <h1>Drivers & Safety Profiles</h1>
+                        <p>Manage driver information and license compliance</p>
+                    </div>
+                    <div class="page-header-actions">
+                        <button class="btn btn-primary" onclick="openAddModal()">
+                            + Add Driver
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Alert Container -->
+                <div id="alertContainer"></div>
+
+                <!-- Filters -->
+                <div class="filter-bar">
+                    <div class="filter-group">
+                        <label class="filter-label">Status:</label>
+                        <select class="form-select" id="filterStatus">
+                            <option value="">All</option>
+                            <option value="available">Available</option>
+                            <option value="on_trip">On Trip</option>
+                            <option value="off_duty">Off Duty</option>
+                            <option value="suspended">Suspended</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">License:</label>
+                        <select class="form-select" id="filterLicense">
+                            <option value="">All</option>
+                            <option value="valid">Valid</option>
+                            <option value="expired">Expired</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Business Rule Info -->
+                <div class="alert alert-warning" style="margin-bottom: 20px;">
+                    <span><strong>Note:</strong> Drivers with expired licenses or Suspended status are automatically blocked from trip assignment.</span>
+                </div>
+
+                <!-- KPI Summary -->
+                <div class="kpi-grid" style="margin-bottom: 20px;">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Total Drivers</div>
+                        <div class="kpi-value" id="totalDrivers">0</div>
+                    </div>
+                    <div class="kpi-card" style="border-left-color: #10B981;">
+                        <div class="kpi-label">Available</div>
+                        <div class="kpi-value" id="availableDrivers" style="color: #047857;">0</div>
+                    </div>
+                    <div class="kpi-card" style="border-left-color: #F59E0B;">
+                        <div class="kpi-label">License Expiring Soon</div>
+                        <div class="kpi-value" id="expiringSoon" style="color: #B45309;">0</div>
+                    </div>
+                    <div class="kpi-card" style="border-left-color: #EF4444;">
+                        <div class="kpi-label">Expired/Suspended</div>
+                        <div class="kpi-value" id="expiredSuspended" style="color: #B91C1C;">0</div>
+                    </div>
+                </div>
+
+                <!-- Drivers Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">All Drivers</h2>
+                        <span class="badge badge-on-trip" id="driverCount">0 drivers</span>
+                    </div>
+                    <div class="card-body">
+                        <div id="driversList">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">👤</div>
+                                <h3 class="empty-state-title">Loading...</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Add/Edit Driver Modal -->
+    <div class="modal-overlay hidden" id="driverModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Add Driver</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <form id="driverForm">
+                <input type="hidden" id="driverId" value="">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Full Name <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="driverName" 
+                            placeholder="e.g., Alex Kumar" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">License Number <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="licenseNumber" 
+                                placeholder="e.g., DL88213" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">License Category <span class="required">*</span></label>
+                            <select class="form-select" id="licenseCategory" required>
+                                <option value="">Select category</option>
+                                <option value="LMV">LMV (Light Motor Vehicle)</option>
+                                <option value="HMV">HMV (Heavy Motor Vehicle)</option>
+                                <option value="MCWG">MCWG (Motorcycle with Gear)</option>
+                                <option value="TRANS">TRANS (Transport)</option>
+                                <option value="HGMV">HGMV (Heavy Goods Motor Vehicle)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">License Expiry Date <span class="required">*</span></label>
+                            <input type="date" class="form-input" id="licenseExpiryDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Contact Number <span class="required">*</span></label>
+                            <input type="tel" class="form-input" id="contactNumber" 
+                                placeholder="9876543210" pattern="[0-9]{10}" maxlength="10" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Safety Score (0-100)</label>
+                            <input type="number" class="form-input" id="safetyScore" 
+                                placeholder="100" min="0" max="100" value="100">
+                            <div class="form-help">Default: 100</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" id="driverStatus">
+                                <option value="available">Available</option>
+                                <option value="off_duty">Off Duty</option>
+                                <option value="suspended">Suspended</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveBtn">Save Driver</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/drivers.js"></script>
+</body>
+</html>

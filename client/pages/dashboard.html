@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - TransitOps</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <script src="../js/auth.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">T</div>
+                <h1 class="sidebar-title">TransitOps</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="dashboard.html" class="nav-link active">
+                                <span class="nav-icon">📊</span>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="vehicles.html" class="nav-link">
+                                <span class="nav-icon">🚚</span>
+                                <span>Fleet</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="drivers.html" class="nav-link">
+                                <span class="nav-icon">👤</span>
+                                <span>Drivers</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="trips.html" class="nav-link">
+                                <span class="nav-icon">🗺️</span>
+                                <span>Trips</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="maintenance.html" class="nav-link">
+                                <span class="nav-icon">🔧</span>
+                                <span>Maintenance</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="fuel-expenses.html" class="nav-link">
+                                <span class="nav-icon">⛽</span>
+                                <span>Fuel & Expenses</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="reports.html" class="nav-link">
+                                <span class="nav-icon">📈</span>
+                                <span>Analytics</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-menu">
+                    <div class="user-avatar">U</div>
+                    <div class="user-info">
+                        <div class="user-name">User</div>
+                        <div class="user-role">Role</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <header class="top-header">
+                <div class="header-left">
+                    <div class="search-input">
+                        <input type="text" placeholder="Search...">
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="header-icon-btn" onclick="if(confirm('Logout?')) logout()">
+                        🚪
+                    </button>
+                </div>
+            </header>
+
+            <main class="page-content">
+                <div class="page-header">
+                    <div class="page-header-left">
+                        <h1>Welcome back, <span id="welcomeName">User</span>!</h1>
+                        <p>Here's your fleet overview</p>
+                    </div>
+                </div>
+
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Active Vehicles</div>
+                        <div class="kpi-value" id="activeVehicles">0</div>
+                    </div>
+                    <div class="kpi-card" style="border-left-color: #10B981;">
+                        <div class="kpi-label">Available Vehicles</div>
+                        <div class="kpi-value" id="availableVehicles" style="color: #047857;">0</div>
+                    </div>
+                    <div class="kpi-card" style="border-left-color: #F59E0B;">
+                        <div class="kpi-label">In Maintenance</div>
+                        <div class="kpi-value" id="inMaintenance" style="color: #B45309;">0</div>
+                    </div>
+                    <div class="kpi-card" style="border-left-color: #3B82F6;">
+                        <div class="kpi-label">Active Trips</div>
+                        <div class="kpi-value" id="activeTrips" style="color: #1E40AF;">0</div>
+                    </div>
+                    <div class="kpi-card" style="border-left-color: #8B5CF6;">
+                        <div class="kpi-label">Pending Trips</div>
+                        <div class="kpi-value" id="pendingTrips" style="color: #6D28D9;">0</div>
+                    </div>
+                    <div class="kpi-card" style="border-left-color: #10B981;">
+                        <div class="kpi-label">Drivers on Duty</div>
+                        <div class="kpi-value" id="driversOnDuty" style="color: #047857;">0</div>
+                    </div>
+                    <div class="kpi-card" style="border-left-color: #3D52A0;">
+                        <div class="kpi-label">Fleet Utilization</div>
+                        <div class="kpi-value" id="fleetUtilization">0%</div>
+                    </div>
+                </div>
+
+                <div class="two-col-layout" style="margin-top: 24px;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Quick Actions</h2>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <a href="trips.html" class="btn btn-primary" style="text-decoration: none;">Create Trip</a>
+                            <a href="vehicles.html" class="btn btn-secondary" style="text-decoration: none;">Add Vehicle</a>
+                            <a href="drivers.html" class="btn btn-outline" style="text-decoration: none;">Add Driver</a>
+                            <a href="reports.html" class="btn btn-outline" style="text-decoration: none;">View Reports</a>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">System Status</h2>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>API Server</span>
+                                <span class="badge badge-available">Online</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>Database</span>
+                                <span class="badge badge-available">Connected</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>Your Role</span>
+                                <span class="badge badge-on-trip" id="userRole">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Update welcome message
+        const user = getCurrentUser();
+        if (user) {
+            document.getElementById('welcomeName').textContent = user.name;
+            document.getElementById('userRole').textContent = user.role;
+        }
+
+        // Load KPIs
+        async function loadKPIs() {
+            try {
+                const response = await fetch('http://localhost:5000/api/dashboard/kpis');
+                const result = await response.json();
+                if (result.success) {
+                    document.getElementById('activeVehicles').textContent = result.data.activeVehicles;
+                    document.getElementById('availableVehicles').textContent = result.data.availableVehicles;
+                    document.getElementById('inMaintenance').textContent = result.data.vehiclesInMaintenance;
+                    document.getElementById('activeTrips').textContent = result.data.activeTrips;
+                    document.getElementById('pendingTrips').textContent = result.data.pendingTrips;
+                    document.getElementById('driversOnDuty').textContent = result.data.driversOnDuty;
+                    document.getElementById('fleetUtilization').textContent = result.data.fleetUtilization + '%';
+                }
+            } catch (error) {
+                console.error('Load KPIs error:', error);
+            }
+        }
+
+        loadKPIs();
+    </script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - TransitOps</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-branding">
+            <div class="auth-branding-content">
+                <div class="auth-logo">T</div>
+                <h1 class="auth-brand-title">TransitOps</h1>
+                <p class="auth-brand-subtitle">Smart Transport Operations Platform</p>
+
+                <div style="margin-top: 40px;">
+                    <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; margin-bottom: 16px;">
+                        Why TransitOps?
+                    </h3>
+                    <ul class="role-list">
+                        <li>Complete fleet visibility</li>
+                        <li>Automated compliance tracking</li>
+                        <li>Real-time cost management</li>
+                        <li>Data-driven decisions</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="auth-footer">
+                TRANSITOPS © 2026 - RBAC Enabled
+            </div>
+        </div>
+
+        <div class="auth-form-section">
+            <div class="auth-form">
+                <div class="auth-form-header">
+                    <h2 class="auth-form-title">Create your account</h2>
+                    <p class="auth-form-subtitle">Get started with TransitOps</p>
+                </div>
+
+                <div id="alertContainer"></div>
+
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label class="form-label">Full Name <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="name" 
+                            placeholder="John Doe" required autocomplete="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email <span class="required">*</span></label>
+                        <input type="email" class="form-input" id="email" 
+                            placeholder="you@company.com" required autocomplete="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Role <span class="required">*</span></label>
+                        <select class="form-select" id="role" required>
+                            <option value="dispatcher">Dispatcher</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                        <div class="form-help">Choose your access level</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Password <span class="required">*</span></label>
+                        <input type="password" class="form-input" id="password" 
+                            placeholder="Minimum 6 characters" required autocomplete="new-password">
+                        <div class="form-help">At least 6 characters</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Confirm Password <span class="required">*</span></label>
+                        <input type="password" class="form-input" id="confirmPassword" 
+                            placeholder="Re-enter password" required autocomplete="new-password">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-full btn-lg" id="registerBtn">
+                        Create Account
+                    </button>
+                </form>
+
+                <div class="auth-form-footer">
+                    Already have an account? 
+                    <a href="login.html" style="color: var(--primary); font-weight: 600;">Sign in</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const role = document.getElementById('role').value;
+            const registerBtn = document.getElementById('registerBtn');
+            
+            // Validation
+            if (!name || name.length < 2) return showAlert('Please enter a valid name', 'danger');
+            if (!email) return showAlert('Email is required', 'danger');
+            if (password.length < 6) return showAlert('Password must be at least 6 characters', 'danger');
+            if (password !== confirmPassword) return showAlert('Passwords do not match', 'danger');
+            
+            registerBtn.disabled = true;
+            registerBtn.innerHTML = '<span class="spinner"></span> Creating account...';
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password, role })
+                });
+                
+                const result = await response.json();
+                if (!result.success) throw new Error(result.error);
+                
+                // Save token and redirect
+                localStorage.setItem('token', result.data.token);
+                localStorage.setItem('user', JSON.stringify(result.data.user));
+                
+                showAlert('Account created! Redirecting...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+                
+            } catch (error) {
+                showAlert(error.message, 'danger');
+                registerBtn.disabled = false;
+                registerBtn.textContent = 'Create Account';
+            }
+        });
+
+        function showAlert(message, type = 'success') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+            alertContainer.innerHTML = `<div class="alert ${alertClass}"><span>${message}</span></div>`;
+            if (type === 'danger') {
+                setTimeout(() => { alertContainer.innerHTML = ''; }, 4000);
+            }
+        }
+    </script>
+</body>
+</html>
