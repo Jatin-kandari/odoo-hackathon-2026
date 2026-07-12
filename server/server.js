@@ -29,7 +29,9 @@ app.get('/api/health', (req, res) => {
 app.use('/api/maintenance', require('./routes/maintenanceRoutes'));
 app.use('/api/fuel-logs', require('./routes/fuelRoutes'));
 app.use('/api/expenses', require('./routes/expenseRoutes'));
-
+app.use('/api/dashboard', require('./routes/dashboardRoutes'));
+app.use('/api/vehicles', require('./routes/vehicleRoutes'));
+app.use('/api/drivers', require('./routes/driverRoutes'));
 app.listen(PORT, () => {
     console.log('====================================');
     console.log(`Server running on http://localhost:${PORT}`);
