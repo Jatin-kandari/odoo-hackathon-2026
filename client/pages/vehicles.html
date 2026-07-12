@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicles - TransitOps</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">T</div>
+                <h1 class="sidebar-title">TransitOps</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="dashboard.html" class="nav-link">
+                                <span class="nav-icon">📊</span>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="vehicles.html" class="nav-link active">
+                                <span class="nav-icon">🚚</span>
+                                <span>Fleet</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="drivers.html" class="nav-link">
+                                <span class="nav-icon">👤</span>
+                                <span>Drivers</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="trips.html" class="nav-link">
+                                <span class="nav-icon">🗺️</span>
+                                <span>Trips</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="maintenance.html" class="nav-link">
+                                <span class="nav-icon">🔧</span>
+                                <span>Maintenance</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="fuel-expenses.html" class="nav-link">
+                                <span class="nav-icon">⛽</span>
+                                <span>Fuel & Expenses</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="reports.html" class="nav-link">
+                                <span class="nav-icon">📈</span>
+                                <span>Analytics</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="settings.html" class="nav-link">
+                                <span class="nav-icon">⚙️</span>
+                                <span>Settings</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-menu">
+                    <div class="user-avatar">R</div>
+                    <div class="user-info">
+                        <div class="user-name">Raven K.</div>
+                        <div class="user-role">Dispatcher</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <div class="search-input">
+                        <input type="text" id="searchInput" placeholder="Search by registration...">
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="header-icon-btn">
+                        🔔
+                        <span class="notification-badge"></span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="page-content">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div class="page-header-left">
+                        <h1>Vehicle Registry</h1>
+                        <p>Manage your fleet vehicles</p>
+                    </div>
+                    <div class="page-header-actions">
+                        <button class="btn btn-primary" onclick="openAddModal()">
+                            + Add Vehicle
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Alert Container -->
+                <div id="alertContainer"></div>
+
+                <!-- Filters -->
+                <div class="filter-bar">
+                    <div class="filter-group">
+                        <label class="filter-label">Type:</label>
+                        <select class="form-select" id="filterType">
+                            <option value="">All</option>
+                            <option value="truck">Truck</option>
+                            <option value="van">Van</option>
+                            <option value="car">Car</option>
+                            <option value="mini">Mini</option>
+                            <option value="bike">Bike</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Status:</label>
+                        <select class="form-select" id="filterStatus">
+                            <option value="">All</option>
+                            <option value="available">Available</option>
+                            <option value="on_trip">On Trip</option>
+                            <option value="in_shop">In Shop</option>
+                            <option value="retired">Retired</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Business Rule Info -->
+                <div class="alert alert-info" style="margin-bottom: 20px;">
+                    <span><strong>Note:</strong> Registration number must be unique. Retired and In Shop vehicles are hidden from Trip Dispatcher.</span>
+                </div>
+
+                <!-- Vehicles Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">All Vehicles</h2>
+                        <span class="badge badge-on-trip" id="vehicleCount">0 vehicles</span>
+                    </div>
+                    <div class="card-body">
+                        <div id="vehiclesList">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">🚚</div>
+                                <h3 class="empty-state-title">Loading...</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Add/Edit Vehicle Modal -->
+    <div class="modal-overlay hidden" id="vehicleModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Add Vehicle</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <form id="vehicleForm">
+                <input type="hidden" id="vehicleId" value="">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Registration Number <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="registrationNumber" 
+                                placeholder="e.g., GJ01AB1234" required>
+                            <div class="form-help">Must be unique</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Vehicle Name/Model <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="vehicleName" 
+                                placeholder="e.g., VAN-05" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Type <span class="required">*</span></label>
+                            <select class="form-select" id="vehicleType" required>
+                                <option value="">Select type</option>
+                                <option value="truck">Truck</option>
+                                <option value="van">Van</option>
+                                <option value="car">Car</option>
+                                <option value="mini">Mini</option>
+                                <option value="bike">Bike</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" id="vehicleStatus">
+                                <option value="available">Available</option>
+                                <option value="in_shop">In Shop</option>
+                                <option value="retired">Retired</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Max Load Capacity (kg) <span class="required">*</span></label>
+                            <input type="number" class="form-input" id="maxLoadCapacity" 
+                                placeholder="500" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Current Odometer (km)</label>
+                            <input type="number" class="form-input" id="currentOdometer" 
+                                placeholder="0" min="0">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Acquisition Cost (₹) <span class="required">*</span></label>
+                        <input type="number" class="form-input" id="acquisitionCost" 
+                            placeholder="500000" min="0" step="0.01" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveBtn">Save Vehicle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/vehicles.js"></script>
+</body>
+</html>
