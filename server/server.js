@@ -27,6 +27,8 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api/maintenance', require('./routes/maintenanceRoutes'));
+app.use('/api/fuel-logs', require('./routes/fuelRoutes'));
+app.use('/api/expenses', require('./routes/expenseRoutes'));
 
 app.listen(PORT, () => {
     console.log('====================================');

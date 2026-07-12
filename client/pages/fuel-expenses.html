@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuel & Expenses - TransitOps</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">T</div>
+                <h1 class="sidebar-title">TransitOps</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="dashboard.html" class="nav-link">
+                                <span class="nav-icon">📊</span>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="vehicles.html" class="nav-link">
+                                <span class="nav-icon">🚚</span>
+                                <span>Fleet</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="drivers.html" class="nav-link">
+                                <span class="nav-icon">👤</span>
+                                <span>Drivers</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="trips.html" class="nav-link">
+                                <span class="nav-icon">🗺️</span>
+                                <span>Trips</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="maintenance.html" class="nav-link">
+                                <span class="nav-icon">🔧</span>
+                                <span>Maintenance</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="fuel-expenses.html" class="nav-link active">
+                                <span class="nav-icon">⛽</span>
+                                <span>Fuel & Expenses</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="reports.html" class="nav-link">
+                                <span class="nav-icon">📈</span>
+                                <span>Analytics</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="settings.html" class="nav-link">
+                                <span class="nav-icon">⚙️</span>
+                                <span>Settings</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-menu">
+                    <div class="user-avatar">R</div>
+                    <div class="user-info">
+                        <div class="user-name">Raven K.</div>
+                        <div class="user-role">Dispatcher</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <div class="search-input">
+                        <input type="text" placeholder="Search...">
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="header-icon-btn">
+                        🔔
+                        <span class="notification-badge"></span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="page-content">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div class="page-header-left">
+                        <h1>Fuel & Expense Management</h1>
+                        <p>Track fuel consumption and operational expenses</p>
+                    </div>
+                    <div class="page-header-actions">
+                        <button class="btn btn-secondary" onclick="openFuelModal()">
+                            + Log Fuel
+                        </button>
+                        <button class="btn btn-primary" onclick="openExpenseModal()">
+                            + Add Expense
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Alert Container -->
+                <div id="alertContainer"></div>
+
+                <!-- Cost Summary Cards -->
+                <div class="kpi-grid" style="margin-bottom: 24px;">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Total Fuel Cost</div>
+                        <div class="kpi-value" id="totalFuel">₹0</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Total Maintenance</div>
+                        <div class="kpi-value" id="totalMaintenance">₹0</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Other Expenses</div>
+                        <div class="kpi-value" id="totalExpenses">₹0</div>
+                    </div>
+                    <div class="kpi-card" style="border-left-color: #10B981;">
+                        <div class="kpi-label">Total Operational Cost</div>
+                        <div class="kpi-value" id="totalCost" style="color: #047857;">₹0</div>
+                    </div>
+                </div>
+
+                <!-- Fuel Logs Section -->
+                <div class="card" style="margin-bottom: 24px;">
+                    <div class="card-header">
+                        <h2 class="card-title">Fuel Logs</h2>
+                        <span class="badge badge-on-trip" id="fuelCount">0 records</span>
+                    </div>
+                    <div class="card-body">
+                        <div id="fuelLogsList">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">⛽</div>
+                                <h3 class="empty-state-title">Loading...</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other Expenses Section -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Other Expenses (Toll / Parking / Misc)</h2>
+                        <span class="badge badge-on-trip" id="expenseCount">0 records</span>
+                    </div>
+                    <div class="card-body">
+                        <div id="expensesList">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">💰</div>
+                                <h3 class="empty-state-title">Loading...</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Fuel Log Modal -->
+    <div class="modal-overlay hidden" id="fuelModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Log Fuel Consumption</h3>
+                <button class="modal-close" onclick="closeFuelModal()">×</button>
+            </div>
+            <form id="fuelForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Vehicle <span class="required">*</span></label>
+                        <select class="form-select" id="fuelVehicleId" required>
+                            <option value="">Select vehicle</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Liters <span class="required">*</span></label>
+                            <input type="number" class="form-input" id="fuelLiters" 
+                                placeholder="0.00" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Cost per Liter (₹) <span class="required">*</span></label>
+                            <input type="number" class="form-input" id="fuelCostPerLiter" 
+                                placeholder="0.00" min="0" step="0.01" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Date <span class="required">*</span></label>
+                        <input type="date" class="form-input" id="fuelDate" required>
+                    </div>
+                    <div class="alert alert-info" id="totalPreview" style="display: none;">
+                        <span>Total Cost: <strong id="totalCostPreview">₹0</strong></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" onclick="closeFuelModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Fuel Log</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Expense Modal -->
+    <div class="modal-overlay hidden" id="expenseModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Expense</h3>
+                <button class="modal-close" onclick="closeExpenseModal()">×</button>
+            </div>
+            <form id="expenseForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Vehicle <span class="required">*</span></label>
+                        <select class="form-select" id="expenseVehicleId" required>
+                            <option value="">Select vehicle</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Category <span class="required">*</span></label>
+                            <select class="form-select" id="expenseCategory" required>
+                                <option value="">Select category</option>
+                                <option value="toll">Toll</option>
+                                <option value="parking">Parking</option>
+                                <option value="insurance">Insurance</option>
+                                <option value="repair">Repair</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Amount (₹) <span class="required">*</span></label>
+                            <input type="number" class="form-input" id="expenseAmount" 
+                                placeholder="0" min="0" step="0.01" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Date <span class="required">*</span></label>
+                        <input type="date" class="form-input" id="expenseDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-textarea" id="expenseDescription" 
+                            placeholder="Optional details about this expense..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" onclick="closeExpenseModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Expense</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/fuel-expenses.js"></script>
+</body>
+</html>
