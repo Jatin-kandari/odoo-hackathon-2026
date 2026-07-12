@@ -32,6 +32,9 @@ app.use('/api/expenses', require('./routes/expenseRoutes'));
 app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 app.use('/api/vehicles', require('./routes/vehicleRoutes'));
 app.use('/api/drivers', require('./routes/driverRoutes'));
+app.use('/api/trips', require('./routes/tripRoutes'));
+app.use('/api/auth', require('./routes/authRoutes'));
+
 app.listen(PORT, () => {
     console.log('====================================');
     console.log(`Server running on http://localhost:${PORT}`);
